@@ -9,7 +9,11 @@ stock_service = StockService()
 
 @stock_bp.route('/inventarios/retirar', methods=['POST'])
 def retirar_producto():
-    stock = stock_schema.load(request.json)
+    print("data inventario", request.json)
+    data = request.json
+    # Filtrar campos no deseados
+    filtered_data = {key: data[key] for key in ['producto', 'cantidad','entrada_salida'] if key in data}
+    stock = stock_schema.load(filtered_data)
     stock = stock_service.retirar(stock)
     if stock.id:
         status_code = 200 

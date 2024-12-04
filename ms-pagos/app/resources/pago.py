@@ -9,7 +9,11 @@ pago_service = PagoService()
 
 @pago_bp.route('/pagos/registrar', methods=['POST'])
 def registrar_pago():
-    pago = pago_schema.load(request.json)
+    print("pagos", request.json)
+    data = request.json
+    # Filtrar campos no deseados
+    filtered_data = {key: data[key] for key in ['producto', 'precio','medio_pago'] if key in data}
+    pago = pago_schema.load(filtered_data)
     result = pago_service.registrar_pago(pago)
     if result:
         status_code = 200 

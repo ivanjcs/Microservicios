@@ -10,3 +10,5 @@ class Compra(db.Model):
     fecha_compra: datetime = db.Column(db.DateTime, nullable=False)
     direccion_envio: str = db.Column(db.String(120), nullable=False)
     deleted_at: datetime = db.Column(db.DateTime, nullable=True)
+
+

@@ -8,5 +8,6 @@ Flask-SQLAlchemy==3.1.1
 SQLAlchemy==2.0.36
 marshmallow-sqlalchemy==1.1.0
 Flask-Migrate==4.0.7
+redis-lock==0.2.0
 psycopg2==2.9.7
 psycopg[binary]
