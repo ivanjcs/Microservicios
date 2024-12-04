@@ -1,3 +1,4 @@
+# Seleccionamos la imagen de python
 FROM python:3.12-slim-bookworm
 
 ENV FLASK_CONTEXT=production
@@ -15,6 +16,7 @@ WORKDIR /home/flaskapp
 USER flaskapp
 RUN mkdir app
 
+# copiamos lo que está aca al WORKDIr
 COPY ./app ./app
 COPY ./app.py .
 

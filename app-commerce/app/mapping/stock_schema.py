@@ -8,6 +8,11 @@ class StockSchema(Schema):
     cantidad = fields.Float(required=True, validate=validate.Range(min=0))
     entrada_salida = fields.Integer(required=True, validate=validate.OneOf([1, 2]))
 
+
+    # Post load es un decorador de marshmallow
+    # el cual indica que esta funcion se ejecutará despues de que
+    # los datos sean deserializados. Sirve para convertir los datos validados
+    # en un bojeto de python.
     @post_load
     def make_stock(self, data, **kwargs):
         stock = Stock()

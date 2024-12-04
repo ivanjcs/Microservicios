@@ -10,8 +10,10 @@ compra_service = CompraService()
 
 @compra_bp.route('/compras', methods=['POST'])
 def comprar():
+    logging.info(f"Datos recibidos: {request.json}")
     compra = compra_schema.load(request.json)
     logging.info(f"Compra <-: {compra}")
+    logging.debug(f"Datos recibidos: {request.json}")
     compra = compra_service.save(compra)
     if compra.id:
         status_code = 200
