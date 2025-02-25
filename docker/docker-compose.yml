@@ -8,7 +8,14 @@ services:
         labels:
           - "traefik.enable=true"
           - "traefik.http.routers.ecommerce.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.ecommerce.tls=true"
+          # Puerto por defecto del contenedor en flask
           - "traefik.http.services.ecommerce.loadbalancer.server.port=5000"
+          - "traefik.docker.network=mired"
+          # Circuit breaker
+          - "traefik.http.middlewares.ecommerce.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
+          - "traefik.http.middlewares.ecommerce.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+          - "traefik.http.middlewares.ecommerce.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
         ports:
             - 5000:5000
         networks:
@@ -37,8 +44,15 @@ services:
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.mscatalogo.rule=Host(`mscatalogo.localhost`)"
+          - "traefik.http.routers.mscatalogo.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.mscatalogo.tls=true"
+          # Puerto por defecto del contenedor en flask
           - "traefik.http.services.mscatalogo.loadbalancer.server.port=5000"
+          - "traefik.docker.network=mired"
+          # Circuit breaker
+          - "traefik.http.middlewares.mscatalogo.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
+          - "traefik.http.middlewares.mscatalogo.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+          - "traefik.http.middlewares.mscatalogo.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
         ports:
             - 5001:5000
         networks:
@@ -63,8 +77,15 @@ services:
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.maspagos.rule=Host(`mspagos.localhost`)"
+          - "traefik.http.routers.mspagos.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.mspagos.tls=true"
+          # Puerto por defecto del contenedor en flask
           - "traefik.http.services.mspagos.loadbalancer.server.port=5000"
+          - "traefik.docker.network=mired"
+          # Circuit breaker
+          - "traefik.http.middlewares.mspagos.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
+          - "traefik.http.middlewares.mspagos.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+          - "traefik.http.middlewares.mspagos.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
         ports:
             - 5002:5000
         networks:
@@ -88,8 +109,15 @@ services:
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.mscompras.rule=Host(`mscompras.localhost`)"
-          - "traefik.http.services.mscomrpas.loadbalancer.server.port=5000"
+          - "traefik.http.routers.mscompras.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.mscompras.tls=true"
+          # Puerto por defecto del contenedor en flask
+          - "traefik.http.services.mscompras.loadbalancer.server.port=5000"
+          - "traefik.docker.network=mired"
+          # Circuit breaker
+          - "traefik.http.middlewares.mscompras.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
+          - "traefik.http.middlewares.mscompras.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+          - "traefik.http.middlewares.mscompras.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
         ports:
             - 5003:5000
         networks:
@@ -113,8 +141,15 @@ services:
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.msinventarios.rule=Host(`msinventarios.localhost`)"
+          - "traefik.http.routers.msinventarios.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.msinventarios.tls=true"
+          # Puerto por defecto del contenedor en flask
           - "traefik.http.services.msinventarios.loadbalancer.server.port=5000"
+          - "traefik.docker.network=mired"
+          # Circuit breaker
+          - "traefik.http.middlewares.msinventarios.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
+          - "traefik.http.middlewares.msinventarios.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+          - "traefik.http.middlewares.msinventarios.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
         ports:
             - 5004:5000
         networks:
