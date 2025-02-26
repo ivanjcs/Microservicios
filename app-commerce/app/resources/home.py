@@ -19,10 +19,13 @@ def index():
 @home.route('/commerce/consultar/catalogo/<int:id>', methods=['GET'])
 def consultar_catalogo(id:int):
     commerce = CommerceService()
-    producto = commerce.consultar_catalogo(id)
-    result = {"message": "No se encontró el producto"}
-    status_code = 404
-    if producto:
-        result = producto_schema.dump(producto)
-        status_code = 200
-    return result, status_code
+    try:
+        producto = commerce.consultar_catalogo(id)
+        result = {"message": "No se encontró el producto"}
+        status_code = 404
+        if producto:
+            result = producto_schema.dump(producto)
+            status_code = 200
+        return result, status_code
+    except:
+        return "No anduvo papi", 404
