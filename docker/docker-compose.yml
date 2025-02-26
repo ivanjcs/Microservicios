@@ -7,15 +7,15 @@ services:
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.ecommerce.rule=Host(`ecomerce.localhost`)"
-          - "traefik.http.routers.ecommerce.tls=true"
+          - "traefik.http.routers.ecomerce.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.ecomerce.tls=true"
           # Puerto por defecto del contenedor en flask
-          - "traefik.http.services.ecommerce.loadbalancer.server.port=5000"
+          - "traefik.http.services.ecomerce.loadbalancer.server.port=5000"
           - "traefik.docker.network=mired"
           # Circuit breaker
-          - "traefik.http.middlewares.ecommerce.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
-          - "traefik.http.middlewares.ecommerce.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
-          - "traefik.http.middlewares.ecommerce.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
+          - "traefik.http.middlewares.ecomerce.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
+          - "traefik.http.middlewares.ecomerce.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+          - "traefik.http.middlewares.ecomerce.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
         ports:
             - 5000:5000
         networks:

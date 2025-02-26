@@ -1,0 +1,5 @@
+docker/.env
+ms-catalogo/.env
+ms-compras/.env
+ms-inventario/.env
+ms-pagos/.env
