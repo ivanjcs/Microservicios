@@ -1,13 +1,13 @@
 services:
     ecomerce:
         image: app-commerce:v1.0.7
-        container_name: ecomerce
+        #container_name: ecomerce
         build:
             context: ../app-commerce
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.ecomerce.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.ecomerce.rule=Host(`ecomerce.universidad.localhost`)"
           - "traefik.http.routers.ecomerce.tls=true"
           # Puerto por defecto del contenedor en flask
           - "traefik.http.services.ecomerce.loadbalancer.server.port=5000"
@@ -16,19 +16,19 @@ services:
           - "traefik.http.middlewares.ecomerce.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
           - "traefik.http.middlewares.ecomerce.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
           - "traefik.http.middlewares.ecomerce.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
-        ports:
-            - 5000:5000
+        #ports:
+        #    - 5000:5000
         networks:
             - mired
         environment:
             - FLASK_CONTEXT=${FLASK_CONTEXT}
-            # el valor de REDIS_HOST = al container_name que tiene en su propio docker-compose.yml
+            # el valor de REDIS_HOST = al #container_name que tiene en su propio docker-compose.yml
             - REDIS_HOST=${REDIS_HOST}
             - REDIS_PORT=${REDIS_PORT}
             - REDIS_PASSWORD=${REDIS_PASSWORD}
             - REDIS_DB=${REDIS_DB}
-            # el valor de MSCATALOGO_URL, MSPAGOS_URL, MSCOMPRAS_URL, MSINVENTARIOS_URL = al container_name con el puerto 5000 ejemplo http://mscatalogo:5000
-            # desde el microservicio ecomerce se puede acceder a los microservicios mscatalogo, mspagos, mscompras, msinventarios por el container_name:puerto
+            # el valor de MSCATALOGO_URL, MSPAGOS_URL, MSCOMPRAS_URL, MSINVENTARIOS_URL = al #container_name con el puerto 5000 ejemplo http://mscatalogo:5000
+            # desde el microservicio ecomerce se puede acceder a los microservicios mscatalogo, mspagos, mscompras, msinventarios por el #container_name:puerto
             # desde el host se accede a los microservicios como http://localhost:puerto ejemplo http://localhost:5001 para mscatalogo, http://localhost:5002 para mspagos, http://localhost:5003 para mscompras, http://localhost:5004 para msinventarios
             - MSCATALOGO_URL=${MSCATALOGO_URL}
             - MSPAGOS_URL=${MSPAGOS_URL}
@@ -36,7 +36,7 @@ services:
             - MSINVENTARIOS_URL=${MSINVENTARIOS_URL}
     mscatalogo:
         image: mscatalogo:v1.0.1
-        container_name: mscatalogo
+        #container_name: mscatalogo
         depends_on:
             - ecomerce
         build:
@@ -44,7 +44,7 @@ services:
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.mscatalogo.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.mscatalogo.rule=Host(`mscatalogo.universidad.localhost`)"
           - "traefik.http.routers.mscatalogo.tls=true"
           # Puerto por defecto del contenedor en flask
           - "traefik.http.services.mscatalogo.loadbalancer.server.port=5000"
@@ -53,8 +53,8 @@ services:
           - "traefik.http.middlewares.mscatalogo.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
           - "traefik.http.middlewares.mscatalogo.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
           - "traefik.http.middlewares.mscatalogo.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
-        ports:
-            - 5001:5000
+        #ports:
+        #    - 5001:5000
         networks:
             - mired
         environment:
@@ -63,13 +63,13 @@ services:
             - REDIS_PORT=${REDIS_PORT}
             - REDIS_PASSWORD=${REDIS_PASSWORD}
             - REDIS_DB=${REDIS_DB}
-            # la URI para el servidor se obtiene de container_name del docker-compose de postgresql: [postgresql://usuario:password@postgresql-servidor:5432/ecommerce]
+            # la URI para el servidor se obtiene de #container_name del docker-compose de postgresql: [postgresql://usuario:password@postgresql-servidor:5432/ecommerce]
             - TEST_DATABASE_URI=${TEST_DATABASE_URI}
             - DEV_DATABASE_URI=${DEV_DATABASE_URI}
             - PROD_DATABASE_URI=${PROD_DATABASE_URI}
     mspagos:
         image: mspagos:v1.0.2
-        container_name: mspagos
+        #container_name: mspagos
         depends_on:
             - ecomerce
         build:
@@ -77,7 +77,7 @@ services:
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.mspagos.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.mspagos.rule=Host(`mspagos.universidad.localhost`)"
           - "traefik.http.routers.mspagos.tls=true"
           # Puerto por defecto del contenedor en flask
           - "traefik.http.services.mspagos.loadbalancer.server.port=5000"
@@ -86,8 +86,8 @@ services:
           - "traefik.http.middlewares.mspagos.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
           - "traefik.http.middlewares.mspagos.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
           - "traefik.http.middlewares.mspagos.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
-        ports:
-            - 5002:5000
+        #ports:
+        #    - 5002:5000
         networks:
             - mired
         environment:
@@ -101,7 +101,7 @@ services:
             - PROD_DATABASE_URI=${PROD_DATABASE_URI}
     mscompras:
         image: mscompras:v1.0.2
-        container_name: mscompras
+        #container_name: mscompras
         depends_on:
             - ecomerce
         build:
@@ -109,7 +109,7 @@ services:
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.mscompras.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.mscompras.rule=Host(`mscompras.universidad.localhost`)"
           - "traefik.http.routers.mscompras.tls=true"
           # Puerto por defecto del contenedor en flask
           - "traefik.http.services.mscompras.loadbalancer.server.port=5000"
@@ -118,8 +118,8 @@ services:
           - "traefik.http.middlewares.mscompras.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
           - "traefik.http.middlewares.mscompras.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
           - "traefik.http.middlewares.mscompras.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
-        ports:
-            - 5003:5000
+        #ports:
+        #    - 5003:5000
         networks:
             - mired
         environment:
@@ -133,7 +133,7 @@ services:
             - PROD_DATABASE_URI=${PROD_DATABASE_URI}
     msinventarios:
         image: msinventario:v1.0.2
-        container_name: msinventarios
+        #container_name: msinventarios
         depends_on:
             - ecomerce
         build:
@@ -141,7 +141,7 @@ services:
             dockerfile: Dockerfile.gunicorn
         labels:
           - "traefik.enable=true"
-          - "traefik.http.routers.msinventarios.rule=Host(`ecomerce.localhost`)"
+          - "traefik.http.routers.msinventarios.rule=Host(`msinventarios.universidad.localhost`)"
           - "traefik.http.routers.msinventarios.tls=true"
           # Puerto por defecto del contenedor en flask
           - "traefik.http.services.msinventarios.loadbalancer.server.port=5000"
@@ -150,8 +150,8 @@ services:
           - "traefik.http.middlewares.msinventarios.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
           - "traefik.http.middlewares.msinventarios.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
           - "traefik.http.middlewares.msinventarios.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
-        ports:
-            - 5004:5000
+        #ports:
+        #    - 5004:5000
         networks:
             - mired
         environment:
@@ -180,7 +180,7 @@ services:
           - "traefik.tcp.routers.redis.entryPoints=redis"
           - "traefik.tcp.routers.redis.service=redis"
           - "traefik.tcp.services.redis.loadbalancer.server.port=6379"
-# Todos los microservicios y servicios (redis, postgresql) deben estar en la misma red
+
 networks:
     mired:
         external: true
