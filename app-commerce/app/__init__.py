@@ -1,9 +1,12 @@
-from flask import Flask
+from flask import Flask, request
 from flask_caching import Cache
 from flask_marshmallow import Marshmallow
 import os
 from app.config import config
 from app.config.cache_config import cache_config
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+import redis
 
 
 ma = Marshmallow() # creamos una instancia de la extension marshmallow
@@ -15,6 +18,17 @@ cache = Cache() # creamos una instancia de la extension flask_caching
 """
  Flask-Caching es una extensión para implementar un sistema de cacheo, lo que puede acelerar las respuestas de la API y reducir la carga en recursos externos como bases de datos.
 """
+redis_host = os.getenv("REDIS_HOST", "localhost")
+redis_port = os.getenv("REDIS_PORT", "6379")
+redis_password = os.getenv("REDIS_PASSWORD", "Qvv3r7y")
+
+# Configurar Flask-Limiter con Redis y autenticación
+limiter = Limiter(
+    key_func=lambda: request.headers.get("X-Forwarded-For", request.remote_addr),
+    storage_uri=f"redis://:{redis_password}@{redis_host}:{redis_port}/0",
+    default_limits=["3600 per minute"]
+)
+
 
 def create_app() -> Flask: # Se crea una funcion la cual devuelve un objeto de tipo flask
     """
@@ -35,7 +49,7 @@ def create_app() -> Flask: # Se crea una funcion la cual devuelve un objeto de t
     print(f"Running in {cache_config} mode") # Imprime un mensaje en la consola indicando el modo de configuracion del sistema de caché.
     ma.init_app(app) # Inicializa marshmallow con la instancia de la aplicacion de flask
     cache.init_app(app, config=cache_config) # Inicializa flask-chaching con la instancia de la aplicacion de flask y configura el cache segun cache_config
-    
+    limiter.init_app(app)  # Inicializa el limitador en la aplicación
     
     from app.resources import home # Llamamos a todas las rutas
     """
